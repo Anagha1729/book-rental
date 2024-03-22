@@ -3,6 +3,7 @@ import Header from '../Component/Header'
 import { Row,Col,Card,Button} from 'react-bootstrap'
 import Genre from '../Asset/Cat.jpg'
 import { Link } from 'react-router-dom'
+
 function Dashboard() {
   return (
     <div>

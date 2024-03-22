@@ -7,13 +7,14 @@ import Header from '../Component/Header';
 import { toast } from 'react-toastify';
 import { addBookApi } from '../Services/Allapi';
 import { Link } from 'react-router-dom';
+import { message } from 'antd';
 
 function Manage() {
 
   const [token, setToken] = useState("")
   const [preview, setPreview] = useState("")
   const [bookDetails, setBookDetails] = useState({
-    title: "", book_image: "", author: "", genre: "", description: "", language: "", price: ""
+    title: "", book_image: "", author: "", genre: "", status: "", language: "", price: ""
   })
 const [upload,setUpload]=useState(false)
 
@@ -31,9 +32,9 @@ const [upload,setUpload]=useState(false)
   console.log(preview)
 
   const handleAddBook = async () => {
-    const { title, book_image, author, genre, description, language, price } = bookDetails
-    if (!title || !book_image || !author || !genre || !description || !language || !price) {
-      toast.warning("Enter Valid Details")
+    const { title, book_image, author, genre, status, language, price } = bookDetails
+    if (!title || !book_image || !author || !genre || !status || !language || !price) {
+      message.warning("Enter Valid Details")
     }
     else {
       const bookData = new FormData()
@@ -41,7 +42,7 @@ const [upload,setUpload]=useState(false)
       bookData.append("book_image", book_image)
       bookData.append("author", author)
       bookData.append("genre", genre)
-      bookData.append("description", description)
+      bookData.append("status", status)
       bookData.append("language", language)
       bookData.append("price",price)
       console.log(bookData, "bookdata")
@@ -52,11 +53,11 @@ const [upload,setUpload]=useState(false)
       const result = await addBookApi(bookData, reqHeader)
       console.log(result, "res")
       if (result.status === 200) {
-        toast.success('Book   Added')
+        message.success('Book   Added')
         setUpload(true)
       }
       else {
-        toast.error("error")
+        message.error("error")
         setUpload(false)
       }
 
@@ -110,10 +111,16 @@ const [upload,setUpload]=useState(false)
 
 
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="formGridDescription">
-            <Form.Label>Book Description</Form.Label>
-            <Form.Control type="text" placeholder="Book Description" onChange={(e) => { setBookDetails({ ...bookDetails, description: e.target.value }) }} />
-          </Form.Group>
+          <Form.Group as={Col} controlId="formGridStaus">
+            <Form.Label>Book Status</Form.Label>
+            <Form.Select defaultValue="Choose..."  onChange={(e) => { setBookDetails({ ...bookDetails, status: e.target.value }) }} >
+          <option value={""}>Choose..</option>
+          <option value={"Available"}>Available</option>
+          <option value={"Sold Out"}>Sold Out</option>
+          </Form.Select>
+          </Form.Group> 
+
+
 
 
           <Form.Group as={Col} controlId="formGridState">
@@ -135,16 +142,14 @@ const [upload,setUpload]=useState(false)
 
         </Row>
 
-        <Form.Group className="mb-3" id="formGridCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
+        
 
-        <Button className='mx-4' variant="primary" type="" onClick={handleAddBook}>
+        <Button className='mx-4' variant="outline-primary" type="" onClick={handleAddBook}>
           Upload
         </Button>
         {
           upload?
-           <Link to={'/view'}><Button variant="primary" type="">
+           <Link to={'/adminview'}><Button variant="outline-primary" type="">
            View Books
          </Button></Link> 
           :""

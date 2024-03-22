@@ -11,6 +11,11 @@ import AdminView from './Pages/AdminView';
 import { ToastContainer } from 'react-toastify';
 import { useState,useEffect } from 'react';
 import { getViewListApi } from './Services/Allapi';
+import 'react-toastify/dist/ReactToastify.css';
+import Cart from './Pages/Cart';
+import View from './Pages/View';
+import Rent from './Component/Rent';
+
 
 function App() {
   const [viewList, setViewList] = useState("")
@@ -39,15 +44,18 @@ function App() {
         <Route path='/register' element={<Auth register/>}/>
         <Route path='/login' element={<Auth />}/>
         <Route path='/manage' element={<Manage/>}/>
-    
+        <Route path='/cart' element={<Cart/>}/>
+        <Route path='/adminview' element={<AdminView/>}/>
+      <Route path='/Rent' element={<Rent/>}/>
       {
         viewList?
         viewList.map(item=>(
-          <Route path={`/admin/category/${item.genre}`} element={<Category/>}/>
+          <Route path={`/admin/category/${item.genre}`} element={<Category book_Id={item}/>}/>
         )):""
       }
 
-      <Route path='/view' element={<AdminView/>}/>
+      <Route path='/view' element={<View/>}/>
+      {/* <Route path='/view' element={<AdminView/>}/> */}
         
       </Routes>
       <Footer/>

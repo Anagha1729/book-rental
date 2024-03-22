@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import readingBook from '../Asset/5.jpg'
 import { registerApi,loginApi, userLoginApi } from '../Services/Allapi'
+import { message } from 'antd'
 
 
 function Auth({ register }) {
@@ -18,7 +19,7 @@ function Auth({ register }) {
   const handleRegistration= async(e)=>{
     e.preventDefault()
     if(!userData.username || !userData.password || !userData.email){
-      toast.error("Enter Values to Every Fields!")
+      message.error("Enter Values to Every Fields!")
     }
     else{
       const res=await registerApi(userData)
@@ -29,7 +30,7 @@ function Auth({ register }) {
         navigate('/login')
       }
       else{
-        toast.error(res.response)
+        message.error(res.response)
       }
   }
 
@@ -40,7 +41,7 @@ const handleLogin = async (e) => {
   console.log(userData)
   const { email, password } = userData
   if (!email || !password) {
-    toast.warning("Enter Valid Details")
+    message.warning("Enter Valid Details")
   }
   else {
     const res = await userLoginApi(userData)
@@ -48,19 +49,19 @@ const handleLogin = async (e) => {
       localStorage.setItem("currentUser", JSON.stringify(res.data.existingUser))
       localStorage.setItem("role", res.data.role)
       localStorage.setItem("token", res.data.token)
-      toast.success("Login Successfully!!")
+      message.success("Login Successfully!!")
       navigate('/dashboard')
     }
      else  if(res.status===200 && res.data.existingAdmin){
       localStorage.setItem("currentUser", JSON.stringify(res.data.existingAdmin))
       localStorage.setItem("role", res.data.role)
       localStorage.setItem("token", res.data.token)
-      toast.success("Login Successfully!!")
-      navigate('/view')
+      message.success("Login Successfully!!")
+      navigate('/adminview')
 
      }
      else{
-      toast.error("Login failed! Please try again")
+      message.error("Login failed! Please try again")
      }
      
   }
